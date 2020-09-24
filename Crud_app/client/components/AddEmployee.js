@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 
 const AddEmployee = (props) => {
-  const initialFormState = { id: null, name: "", username: "" };
+  const initialFormState = {
+    id: null,
+    name: "",
+    username: "",
+    birthday: "",
+    sex: "",
+    salary: "",
+  };
   const [user, setUser] = useState(initialFormState);
 
   const handleInputChange = (event) => {
@@ -13,7 +20,14 @@ const AddEmployee = (props) => {
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        if (!user.name || !user.username) return;
+        if (
+          !user.name ||
+          !user.username ||
+          !user.birthday ||
+          !user.sex ||
+          !user.salary
+        )
+          return;
 
         props.addUser(user);
         setUser(initialFormState);
@@ -31,6 +45,27 @@ const AddEmployee = (props) => {
         type="text"
         name="username"
         value={user.username}
+        onChange={handleInputChange}
+      />
+      <label>Birthday</label>
+      <input
+        type="text"
+        name="birthday"
+        value={user.birthday}
+        onChange={handleInputChange}
+      />
+      <label>Sex</label>
+      <input
+        type="text"
+        name="sex"
+        value={user.sex}
+        onChange={handleInputChange}
+      />
+      <label>Salary</label>
+      <input
+        type="text"
+        name="salary"
+        value={user.salary}
         onChange={handleInputChange}
       />
       <button>Add</button>
