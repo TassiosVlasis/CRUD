@@ -4,8 +4,8 @@ const ListEmployee = (props) => (
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Username</th>
+        <th>First Name</th>
+        <th>Last name</th>
         <th>Actions</th>
       </tr>
     </thead>
