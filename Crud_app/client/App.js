@@ -1,20 +1,77 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import "./App.css";
+import ListEmployee from "./components/ListEmployee";
+import AddEmployee from "./components/AddEmployee";
+import EditEmployee from "./components/EditEmployee";
 
 //components
 
-import InputEmployee from "./components/InputEmployee";
-import ListEmployee from "./components/ListEmployee";
+const App = () => {
+  const usersData = [
+    { id: 1, name: "Tania", username: "floppydiskette" },
+    { id: 2, name: "Craig", username: "siliconeidolon" },
+    { id: 3, name: "Ben", username: "benisphere" },
+  ];
 
-function App() {
+  const [users, setUsers] = useState(usersData);
+  const [editing, setEditing] = useState(false);
+
+  const initialFormState = { id: null, name: "", username: "" };
+  const [currentUser, setCurrentUser] = useState(initialFormState);
+
+  //crud operations
+
+  //increase user's id serial
+  const addUser = (user) => {
+    user.id = users.length + 1;
+    setUsers([...users, user]);
+  };
+  const deleteUser = (id) => {
+    setUsers(users.filter((user) => user.id !== id));
+    setEditing(false);
+  };
+  const editRow = (user) => {
+    setEditing(true);
+
+    setCurrentUser({ id: user.id, name: user.name, username: user.username });
+  };
+  const updateUser = (id, updatedUser) => {
+    setEditing(false);
+
+    setUsers(users.map((user) => (user.id === id ? updatedUser : user)));
+  };
   return (
-    <Fragment>
-      <div className="container">
-        <InputEmployee />
-        <ListEmployee />
+    <div className="container">
+      <h1>CRUD App</h1>
+      <div className="flex-row">
+        <div className="flex-large">
+          {editing ? (
+            <div>
+              <h2>Edit user</h2>
+              <EditEmployee
+                setEditing={setEditing}
+                currentUser={currentUser}
+                updateUser={updateUser}
+              />
+            </div>
+          ) : (
+            <div>
+              <h2>Add user</h2>
+              <AddEmployee addUser={addUser} />
+            </div>
+          )}
+        </div>
+        <div className="flex-large">
+          <h2>View users</h2>
+          <ListEmployee
+            users={users}
+            editRow={editRow}
+            deleteUser={deleteUser}
+          />
+        </div>
       </div>
-    </Fragment>
+    </div>
   );
-}
+};
 
 export default App;
