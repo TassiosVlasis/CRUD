@@ -19,21 +19,21 @@ const EditEmployee = (props) => {
         props.updateUser(user.id, user);
       }}
     >
-      <label>Name</label>
+      <label>First Name</label>
       <input
         type="text"
         name="name"
         value={user.name}
         onChange={handleInputChange}
       />
-      <label>Username</label>
+      <label>Last name</label>
       <input
         type="text"
         name="username"
         value={user.username}
         onChange={handleInputChange}
       />
-      <button>Update user</button>
+      <button>Update employee</button>
       <button
         onClick={() => props.setEditing(false)}
         className="button muted-button"
