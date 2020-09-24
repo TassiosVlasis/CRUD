@@ -8,15 +8,43 @@ import EditEmployee from "./components/EditEmployee";
 
 const App = () => {
   const usersData = [
-    { id: 1, name: "Alex", username: "Alexey" },
-    { id: 2, name: "Brain", username: "Perk" },
-    { id: 3, name: "Carl", username: "Tref" },
+    {
+      id: 1,
+      name: "Alex",
+      username: "Alexey",
+      birthday: "1990-01-01",
+      sex: "M",
+      salary: "15000",
+    },
+    {
+      id: 2,
+      name: "Brain",
+      username: "Perk",
+      birthday: "1990-01-01",
+      sex: "M",
+      salary: "15000",
+    },
+    {
+      id: 3,
+      name: "Carl",
+      username: "Tref",
+      birthday: "1990-01-01",
+      sex: "M",
+      salary: "15000",
+    },
   ];
 
   const [users, setUsers] = useState(usersData);
   const [editing, setEditing] = useState(false);
 
-  const initialFormState = { id: null, name: "", username: "" };
+  const initialFormState = {
+    id: null,
+    name: "",
+    username: "",
+    birthday: "",
+    sex: "",
+    salary: "",
+  };
   const [currentUser, setCurrentUser] = useState(initialFormState);
 
   //crud operations
@@ -33,7 +61,14 @@ const App = () => {
   const editRow = (user) => {
     setEditing(true);
 
-    setCurrentUser({ id: user.id, name: user.name, username: user.username });
+    setCurrentUser({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      birthday: user.birthday,
+      sex: user.sex,
+      salary: user.salary,
+    });
   };
   const updateUser = (id, updatedUser) => {
     setEditing(false);
