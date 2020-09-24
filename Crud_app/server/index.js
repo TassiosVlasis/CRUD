@@ -1,93 +1,48 @@
 const express = require("express");
-const app = express();
+const bodyParser = require("body-parser");
 const cors = require("cors");
-const pool = require("./db");
+const { pool } = require("./config");
 
-//middleware
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.use(express.json()); //req.body
 
-//ROUTES
+const getEmployees = (request, response) => {
+  pool.query("SELECT * FROM company", (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
 
-//create employee data
+const addEmployee = (request, response) => {
+  const { author, title } = request.body;
 
-app.post("/employees", async (req, res) => {
-  try {
-    //console.log(req.body);
-    const { emp_id, fname, lname, birth_day, sex, salary } = req.body;
-    const newEmployees = await pool.query(
-      "INSERT INTO employee (emp_id , fname , lname , birth_day , sex , salary) VALUES($1, $2, $3, $4, $5, $6)",
-      [emp_id, fname, lname, birth_day, sex, salary]
-    );
+  pool.query(
+    "INSERT INTO employee (emp_id , fname , lname , birth_day , sex , salary) VALUES($1, $2, $3, $4, $5, $6)",
+    [emp_id, fname, lname, birth_day, sex, salary],
+    (error) => {
+      if (error) {
+        throw error;
+      }
+      response
+        .status(201)
+        .json({ status: "success", message: "Employee added." });
+    }
+  );
+};
 
-    res.json(newEmployees[0]);
-  } catch (error) {
-    console.error(err.message);
-  }
-});
+app
+  .route("/employee")
+  // GET endpoint
+  .get(getEmployees)
+  // POST endpoint
+  .post(addEmployee);
 
-//get all employees data
-
-app.get("/employees", async (req, res) => {
-  try {
-    const getEmployees = await pool.query("SELECT * FROM employee");
-
-    res.json(getEmployees.row);
-  } catch (error) {
-    console.error(err.message);
-  }
-});
-
-//get a single employee data
-
-app.get("/employees", async (req, res) => {
-  try {
-    const { emp_id } = req.params;
-    const getOne = await pool.query(
-      "SELECT * FROM employee WHERE emp_id = $1",
-      [emp_id]
-    );
-
-    res.json(getOne.row);
-  } catch (error) {
-    console.error(err.message);
-  }
-});
-
-//update an employee data
-
-app.put("/employees", async (req, res) => {
-  try {
-    const { emp_id } = req.params;
-    const { fname, lname, birth_day, sex, salary } = req.body;
-    const updateEmployee = await pool.query(
-      "UPDATE employee SET fname = $1, lname = $2, birth_day = $3, sex = $4, salary = $5 WHERE emp_id =$6",
-      [fname, lname, birth_day, sex, salary, emp_id]
-    );
-
-    res.json("employees were updated");
-  } catch (error) {
-    console.error(err.message);
-  }
-});
-
-//delete an employee
-
-app.delete("/employees", async (req, res) => {
-  try {
-    const { emp_id } = req.params;
-
-    const deleteEmployee = await pool.query(
-      "DELETE FROM employee WHERE emp_id = $1",
-      [emp_id]
-    );
-
-    res.json("employees were deleted");
-  } catch (error) {
-    console.error(err.message);
-  }
-});
-
-app.listen(5000, () => {
-  console.log("server has started on port 5000");
+// Start server
+app.listen(process.env.PORT || 3002, () => {
+  console.log(`Server listening`);
 });
