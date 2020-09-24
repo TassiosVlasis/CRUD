@@ -6,6 +6,9 @@ const ListEmployee = (props) => (
       <tr>
         <th>First Name</th>
         <th>Last name</th>
+        <th>Birthday</th>
+        <th>Sex</th>
+        <th>Salary</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -15,20 +18,23 @@ const ListEmployee = (props) => (
           <tr key={user.id}>
             <td>{user.name}</td>
             <td>{user.username}</td>
+            <td>{user.birthday}</td>
+            <td>{user.sex}</td>
+            <td>{user.salary}</td>
             <td>
               <button
                 className="button muted-button"
                 onClick={() => {
                   props.editRow(user);
                 }}
-                className="button muted-button"
+                className="btn btn-warning"
               >
                 Edit
               </button>
               <button
                 className="button muted-button"
                 onClick={() => props.deleteUser(user.id)}
-                className="button muted-button"
+                className="btn btn-danger"
               >
                 Delete
               </button>
